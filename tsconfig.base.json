@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@app/trial-classes": ["libs/trial-classes"],
+      "@app/trial-classes/*": ["libs/trial-classes/*"],
+      "@app/bookings": ["libs/bookings"],
+      "@app/bookings/*": ["libs/bookings/*"],
+      "@app/payments": ["libs/payments"],
+      "@app/payments/*": ["libs/payments/*"],
+      "@app/parents": ["libs/parents"],
+      "@app/parents/*": ["libs/parents/*"],
+      "@app/auth": ["libs/auth"],
+      "@app/auth/*": ["libs/auth/*"],
+      "@app/database": ["libs/database"],
+      "@app/database/*": ["libs/database/*"],
+      "@app/logger": ["libs/logger"],
+      "@app/logger/*": ["libs/logger/*"],
+      "@app/shared": ["libs/shared"],
+      "@app/shared/*": ["libs/shared/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "coverage"]
+}

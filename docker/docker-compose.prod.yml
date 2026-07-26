@@ -1,0 +1,46 @@
+version: "3.8"
+
+# =============================================================================
+# Trial Booking System — Backend — Production
+# =============================================================================
+# Profile: Production
+# Database: External PostgreSQL (managed, set DATABASE_URL in environment)
+# Seed:     Run manually: docker exec <container> npm run db:seed
+# Hot Reload: Disabled (pre-built, node dist/apps/api/main)
+#
+# Usage:
+#   docker compose -f docker/docker-compose.prod.yml up -d
+#
+# Access:
+#   API: http://localhost:3000/api/v1
+#   Swagger: http://localhost:3000/api/docs
+#
+# Prerequisites:
+#   - PostgreSQL database running and accessible
+#   - Set DATABASE_URL via .env or shell environment
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # NestJS Backend API (production runner stage, no bundled PostgreSQL)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: runner
+    container_name: trial-booking-api-prod
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@host.docker.internal:5432/trial_booking}
+      - NODE_ENV=production
+      - PORT=3000
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - trial-booking-prod
+
+networks:
+  trial-booking-prod:
+    driver: bridge

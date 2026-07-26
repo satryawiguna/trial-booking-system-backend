@@ -1,0 +1,66 @@
+version: "3.8"
+
+# =============================================================================
+# Trial Booking System — Local Development
+# =============================================================================
+# Profile: Local
+# Database: PostgreSQL 14 container (bundled)
+# Seed:     Auto-applied on startup
+# Hot Reload: Enabled (npm run start:dev)
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # NestJS Backend API
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: builder
+    container_name: trial-booking-api-local
+    ports:
+      - "3000:3000"
+    volumes:
+      - ..:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/trial_booking
+      - NODE_ENV=development
+      - PORT=3000
+      - LOG_LEVEL=debug
+    command: >
+      sh -c "
+        npx prisma migrate deploy --schema=libs/database/prisma/schema.prisma &&
+        npx ts-node libs/database/prisma/seed.ts &&
+        npm run start:dev
+      "
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database
+  # ---------------------------------------------------------------------------
+  db:
+    image: postgres:14-alpine
+    container_name: trial-booking-db-local
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=trial_booking
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d trial_booking"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local

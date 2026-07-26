@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/mcp.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# Prisma — only ignore auto-generated lock file, keep migration SQL tracked
+libs/database/prisma/migrations/migration_lock.toml

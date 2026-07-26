@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Parent — the parent who books trial classes for their students
+// ---------------------------------------------------------------------------
+model Parent {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  students Student[]
+
+  @@map("parents")
+}
+
+// ---------------------------------------------------------------------------
+// Student — the student attending a trial class
+// ---------------------------------------------------------------------------
+model Student {
+  id        String   @id @default(uuid()) @db.Uuid
+  parentId  String   @map("parent_id") @db.Uuid
+  name      String
+  birthDate DateTime @map("birth_date") @db.Date
+  createdAt DateTime @default(now()) @map("created_at")
+
+  parent  Parent   @relation(fields: [parentId], references: [id])
+  bookings Booking[]
+
+  @@map("students")
+}
+
+// ---------------------------------------------------------------------------
+// TrialClass — the available trial class (max 4 confirmed students)
+// ---------------------------------------------------------------------------
+model TrialClass {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
+  capacity  Int
+  startTime DateTime @map("start_time")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  bookings Booking[]
+
+  @@map("trial_classes")
+}
+
+// ---------------------------------------------------------------------------
+// Booking — a reservation made by a parent for a student
+// ---------------------------------------------------------------------------
+model Booking {
+  id           String    @id @default(uuid()) @db.Uuid
+  studentId    String    @map("student_id") @db.Uuid
+  trialClassId String    @map("trial_class_id") @db.Uuid
+  status       String
+  confirmedAt  DateTime? @map("confirmed_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  student         Student         @relation(fields: [studentId], references: [id])
+  trialClass      TrialClass      @relation(fields: [trialClassId], references: [id])
+  paymentAttempts PaymentAttempt[]
+
+  @@index([studentId])
+  @@index([trialClassId])
+  @@index([status])
+
+  // Database-level constraints (enforced via custom migration):
+  //   - Partial unique index: (student_id, trial_class_id) WHERE status = 'CONFIRMED'
+  //   - CHECK: status IN ('PENDING_PAYMENT','CONFIRMED','PAYMENT_FAILED','CANCELLED')
+  // See: libs/database/prisma/migrations/*_add_constraints/migration.sql
+
+  @@map("bookings")
+}
+
+// ---------------------------------------------------------------------------
+// PaymentAttempt — records every payment execution
+// ---------------------------------------------------------------------------
+model PaymentAttempt {
+  id        String   @id @default(uuid()) @db.Uuid
+  bookingId String   @map("booking_id") @db.Uuid
+  status    String
+  paidAt    DateTime @map("paid_at") @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([bookingId])
+  @@map("payment_attempts")
+}
