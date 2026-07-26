@@ -30,7 +30,8 @@ import { MockPaymentService } from '../../../infrastructure/mock-payment.service
 export class ProcessPaymentUseCase {
   constructor(
     private readonly prisma: PrismaService,
-    @Inject("IBookingRepository") private readonly bookingRepo: IBookingRepository,
+    @Inject('IBookingRepository')
+    private readonly bookingRepo: IBookingRepository,
     private readonly mockPayment: MockPaymentService,
   ) {}
 
@@ -76,8 +77,8 @@ export class ProcessPaymentUseCase {
 
       // 2. Insert PaymentAttempt
       const payment = await tx.$queryRaw<Array<{ id: string; status: string }>>`
-        INSERT INTO payment_attempts (booking_id, status, paid_at)
-        VALUES (${input.bookingId}::uuid, ${paymentResult}, NOW())
+        INSERT INTO payment_attempts (id, booking_id, status, paid_at)
+        VALUES (gen_random_uuid(), ${input.bookingId}::uuid, ${paymentResult}, NOW())
         RETURNING id, status
       `;
 

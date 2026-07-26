@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { createTestApp } from '../../../test-setup';
-import { TEST_IDS } from '../../../fixtures/test-ids';
+import { createTestApp } from '../../test-setup';
+import { TEST_IDS } from '../../fixtures/test-ids';
 
 describe('Bookings (e2e)', () => {
   let app: INestApplication;
@@ -34,7 +34,7 @@ describe('Bookings (e2e)', () => {
       await request(app.getHttpServer())
         .post('/api/v1/bookings')
         .send({
-          studentId: '00000000-0000-0000-0000-000000000099',
+          studentId: '00000000-0000-4000-8000-000000000099',
           trialClassId: TEST_IDS.trialClasses.mathFundamentals,
         })
         .expect(404);
@@ -45,7 +45,7 @@ describe('Bookings (e2e)', () => {
         .post('/api/v1/bookings')
         .send({
           studentId: TEST_IDS.students.liam,
-          trialClassId: '00000000-0000-0000-0000-000000000099',
+          trialClassId: '00000000-0000-4000-8000-000000000099',
         })
         .expect(404);
     });
@@ -73,7 +73,7 @@ describe('Bookings (e2e)', () => {
 
     it('should return 404 for non-existent booking', async () => {
       await request(app.getHttpServer())
-        .get('/api/v1/bookings/00000000-0000-0000-0000-000000000099')
+        .get('/api/v1/bookings/00000000-0000-4000-8000-000000000099')
         .expect(404);
     });
   });

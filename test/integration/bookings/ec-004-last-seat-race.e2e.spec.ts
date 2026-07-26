@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { createTestApp } from '../../../test-setup';
-import { TEST_IDS } from '../../../fixtures/test-ids';
+import { createTestApp } from '../../test-setup';
+import { TEST_IDS } from '../../fixtures/test-ids';
 
 /**
  * EC-004: Last-Seat Race Condition

@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { createTestApp } from '../../../test-setup';
-import { TEST_IDS } from '../../../fixtures/test-ids';
+import { createTestApp } from '../../test-setup';
+import { TEST_IDS } from '../../fixtures/test-ids';
 
 /**
  * EC-003: Payment Failure Isolation
@@ -21,12 +21,12 @@ describe('EC-003: Payment Failure Isolation (e2e)', () => {
   });
 
   it('should set booking to PaymentFailed and not consume capacity', async () => {
-    // Create a booking on Math Fundamentals (0/4, empty)
+    // Use English Literature (0/4, empty) and student Noah (not used by other tests)
     const createRes = await request(app.getHttpServer())
       .post('/api/v1/bookings')
       .send({
-        studentId: TEST_IDS.students.liam,
-        trialClassId: TEST_IDS.trialClasses.mathFundamentals,
+        studentId: TEST_IDS.students.noah,
+        trialClassId: TEST_IDS.trialClasses.englishLiterature,
       })
       .expect(201);
 
@@ -48,16 +48,17 @@ describe('EC-003: Payment Failure Isolation (e2e)', () => {
 
     expect(bookingRes.body.status).toBe('PAYMENT_FAILED');
 
-    // Verify roster is still empty (no seat consumed — INV-006)
+    // Verify roster: the failed payment did NOT consume a seat (INV-006)
     const rosterRes = await request(app.getHttpServer())
       .get(
-        `/api/v1/trial-classes/${TEST_IDS.trialClasses.mathFundamentals}/roster`,
+        `/api/v1/trial-classes/${TEST_IDS.trialClasses.englishLiterature}/roster`,
       )
       .expect(200);
 
+    // The failed student must NOT appear in roster
     const participantIds = rosterRes.body.participants.map(
       (p: any) => p.studentId,
     );
-    expect(participantIds).not.toContain(TEST_IDS.students.liam);
+    expect(participantIds).not.toContain(TEST_IDS.students.noah);
   });
 });

@@ -1,4 +1,12 @@
-import { Controller, Post, Param, Body, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Body,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -15,6 +23,7 @@ export class PaymentsController {
   constructor(private readonly processPaymentUseCase: ProcessPaymentUseCase) {}
 
   @Post(':id/payments')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Process payment and confirm booking atomically' })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
   @ApiBody({ type: RecordPaymentDto })

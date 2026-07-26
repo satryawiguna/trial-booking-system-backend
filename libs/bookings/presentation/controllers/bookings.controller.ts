@@ -2,6 +2,8 @@ import {
   Controller,
   Post,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Body,
   ParseUUIDPipe,
@@ -47,6 +49,7 @@ export class BookingsController {
   }
 
   @Post(':id/cancel')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Cancel a booking' })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
   @ApiResponse({ status: 200, description: 'Booking cancelled' })
