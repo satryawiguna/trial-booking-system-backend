@@ -1,4 +1,4 @@
-import { Student } from '../entities';
+import { Student, Parent } from '../entities';
 
 /**
  * Repository interface for Parent/Student domain.
@@ -10,4 +10,18 @@ export interface IParentRepository {
 
   /** Find a single student by ID. */
   findStudentById(id: string): Promise<Student | null>;
+
+  /** Upsert a parent by email (create or update). Returns the parent. */
+  upsertParentByEmail(data: {
+    name: string;
+    email: string;
+    phone?: string;
+  }): Promise<Parent>;
+
+  /** Create a new student linked to a parent. */
+  createStudent(data: {
+    parentId: string;
+    name: string;
+    grade?: string;
+  }): Promise<Student>;
 }

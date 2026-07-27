@@ -6,6 +6,7 @@ export class Parent {
     public readonly id: string,
     public readonly name: string,
     public readonly email: string,
+    public readonly phone: string | null,
     public readonly createdAt: Date,
   ) {}
 }

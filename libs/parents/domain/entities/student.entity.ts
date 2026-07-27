@@ -6,7 +6,8 @@ export class Student {
     public readonly id: string,
     public readonly parentId: string,
     public readonly name: string,
-    public readonly birthDate: Date,
+    public readonly grade: string | null,
+    public readonly birthDate: Date | null,
     public readonly createdAt: Date,
   ) {}
 }

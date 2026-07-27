@@ -8,13 +8,15 @@ export class StudentMapper {
     id: string;
     parentId: string;
     name: string;
-    birthDate: Date;
+    grade: string | null;
+    birthDate: Date | null;
     createdAt: Date;
   }): Student {
     return new Student(
       prisma.id,
       prisma.parentId,
       prisma.name,
+      prisma.grade,
       prisma.birthDate,
       prisma.createdAt,
     );
@@ -24,7 +26,8 @@ export class StudentMapper {
     return {
       id: student.id,
       name: student.name,
-      birthDate: student.birthDate.toISOString().split('T')[0],
+      grade: student.grade,
+      birthDate: student.birthDate?.toISOString().split('T')[0] ?? null,
     };
   }
 }
