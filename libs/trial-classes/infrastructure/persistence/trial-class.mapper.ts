@@ -56,8 +56,10 @@ export class TrialClassMapper {
     return {
       trialClassId,
       participants: participants.map((p) => ({
+        bookingId: p.bookingId,
         studentId: p.studentId,
         studentName: p.studentName,
+        createdAt: p.createdAt,
       })),
     };
   }

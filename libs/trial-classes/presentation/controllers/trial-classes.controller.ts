@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { ListTrialClassesUseCase } from '../../application/use-cases/list-trial-classes';
 import { GetTrialClassDetailUseCase } from '../../application/use-cases/get-trial-class-detail';
 import { GetRosterUseCase } from '../../application/use-cases/get-roster';
+import { RosterResponseDto } from '../dto/roster-response.dto';
 
 @ApiTags('trial-classes')
 @Controller('trial-classes')
@@ -35,6 +36,7 @@ export class TrialClassesController {
   @ApiResponse({
     status: 200,
     description: 'Roster retrieved (confirmed only)',
+    type: RosterResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Trial class not found' })
   async roster(@Param('id', ParseUUIDPipe) id: string) {

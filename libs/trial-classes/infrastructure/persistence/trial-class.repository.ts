@@ -91,6 +91,8 @@ export class TrialClassRepository implements ITrialClassRepository {
         status: 'CONFIRMED',
       },
       select: {
+        id: true,
+        createdAt: true,
         student: {
           select: {
             id: true,
@@ -102,8 +104,10 @@ export class TrialClassRepository implements ITrialClassRepository {
     });
 
     return rows.map((r) => ({
+      bookingId: r.id,
       studentId: r.student.id,
       studentName: r.student.name,
+      createdAt: r.createdAt.toISOString(),
     }));
   }
 }

@@ -56,10 +56,9 @@ async function bootstrap() {
     .setTitle('Trial Booking System API')
     .setDescription('REST API for booking trial science/math classes for kids')
     .setVersion('1.0')
-    .addTag('trial-classes', 'Trial class management')
+    .addTag('trial-classes', 'Trial class management (including roster)')
     .addTag('bookings', 'Booking lifecycle')
     .addTag('payments', 'Payment processing')
-    .addTag('roster', 'Class roster')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

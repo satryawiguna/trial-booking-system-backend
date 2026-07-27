@@ -4,8 +4,12 @@ import { TrialClass } from '../entities';
  * Represents a participant in the trial class roster (INV-007, INV-008).
  */
 export interface RosterParticipant {
+  /** The booking ID associated with this roster entry. */
+  bookingId: string;
   studentId: string;
   studentName: string;
+  /** ISO-8601 timestamp of when the booking was created. */
+  createdAt: string;
 }
 
 /**

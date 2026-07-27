@@ -67,6 +67,16 @@ describe('Trial Classes (e2e)', () => {
       // Roster must match confirmed count
       expect(res.body.participants).toHaveLength(detailRes.body.confirmedCount);
       expect(res.body.trialClassId).toBe(TEST_IDS.trialClasses.scienceExplorer);
+
+      // Each participant must include bookingId and createdAt
+      for (const p of res.body.participants) {
+        expect(p).toHaveProperty('bookingId');
+        expect(p).toHaveProperty('createdAt');
+        expect(p.bookingId).toMatch(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+        );
+        expect(new Date(p.createdAt).toISOString()).toBe(p.createdAt);
+      }
     });
 
     it('should return roster consistent with confirmed count', async () => {
@@ -83,6 +93,16 @@ describe('Trial Classes (e2e)', () => {
 
       // Roster must match confirmed count
       expect(res.body.participants).toHaveLength(detailRes.body.confirmedCount);
+
+      // Each participant must include bookingId and createdAt
+      for (const p of res.body.participants) {
+        expect(p).toHaveProperty('bookingId');
+        expect(p).toHaveProperty('createdAt');
+        expect(p.bookingId).toMatch(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+        );
+        expect(new Date(p.createdAt).toISOString()).toBe(p.createdAt);
+      }
     });
   });
 });
